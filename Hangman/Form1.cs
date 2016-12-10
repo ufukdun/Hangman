@@ -7,14 +7,114 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Hangman
 {
-    public partial class Form1 : Form
+    public partial class frmHangman : Form
     {
-        public Form1()
+        private Bitmap[] hangImages = {Hangman.Properties.Resources.stage1, Hangman.Properties.Resources.stage2, Hangman.Properties.Resources.stage3,Hangman.Properties.Resources.stage4,Hangman.Properties.Resources.stage5, Hangman.Properties.Resources.stage6,Hangman.Properties.Resources.stage7, Hangman.Properties.Resources.stage8, Hangman.Properties.Resources.stage9 };
+        private int wrongGuesses = 0;
+        private string current = "";
+        private string copyCurrent = "";
+        private string[] words;
+        public frmHangman()
         {
             InitializeComponent();
+        }
+        private void loadwords()
+        {
+
+            string[] readText = File.ReadAllLines("wordss.txt");
+            words = new string[readText.Length];
+            int index = 0;
+            foreach(string s in readText)
+            {
+                string[] line = s.Split();
+                //words[index++] = line[1];
+
+
+            }
+
+        }
+        private void setupWordChoice()
+        {
+            wrongGuesses = 0;
+            hangImage.Image = hangImages[wrongGuesses];
+            int guessIndex = (new Random()).Next(words.Length);
+            current = words[guessIndex];
+
+            //copyCurrent = "";
+
+            //for(int index=0; index < current.Length; index++)
+            //{
+            //    copyCurrent += "_";
+            //}
+            displayCopy();
+        }
+        private void displayCopy()
+        {
+            lblShowWord.Text += " ";
+            for (int index = 0; index < copyCurrent.Length; index++)
+            {
+                lblShowWord.Text += copyCurrent.Substring(index, 1);
+                lblShowWord.Text += " ";
+            }
+        }
+        private void updateCopy(char guess)
+        {
+
+        }
+
+        private void guessClick(object sender, EventArgs e)
+        {
+            Button choice = sender as Button;
+            choice.Enabled = false;
+            if (current.Contains(choice.Text))
+                {
+                char[] temp = copyCurrent.ToCharArray();
+                char[] find = current.ToCharArray();
+                char guessChar = choice.Text.ElementAt(0);
+                for(int index=0; index<find.Length; index++)
+                {
+                    if(find[index]==guessChar)
+                    {
+                        temp[index] = guessChar;
+                    }
+                }
+                copyCurrent = new string(temp);
+                displayCopy();
+            }
+            else
+            {
+                wrongGuesses++;
+            }
+            if(wrongGuesses <7)
+            {
+                hangImage.Image = hangImages[wrongGuesses];
+            }
+            else
+            {
+                lblResult.Text = "Geçmiş Olsun";
+            }
+            if(copyCurrent.Equals(current))
+            {
+                lblResult.Text = "Kazandın!!";
+            }
+            hangImage.Image = hangImages[wrongGuesses];
+        }
+
+        private void frmHangman_Load(object sender, EventArgs e)
+        {
+            loadwords();
+            setupWordChoice();
+        }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            setupWordChoice();
+            lblResult.Text = "";
+            this.Controls
         }
     }
 }
