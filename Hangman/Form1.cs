@@ -17,45 +17,36 @@ namespace Hangman
         private int wrongGuesses = 0;
         private string current = "";
         private string copyCurrent = "";
-        private string[] words;
+        private string[] readText;
         public frmHangman()
         {
             InitializeComponent();
         }
         private void loadwords()
         {
-
-            string[] readText = File.ReadAllLines("wordss.txt");
-            words = new string[readText.Length];
+            readText = File.ReadAllLines("wordss.txt");
+            //words = new string[readText.Length];
             int index = 0;
-            foreach(string s in readText)
-            {
-                string[] line = s.Split();
-                //words[index++] = line[1];
-
-
-            }
-
         }
         private void setupWordChoice()
         {
             wrongGuesses = 0;
             hangImage.Image = hangImages[wrongGuesses];
-            int guessIndex = (new Random()).Next(words.Length);
-            current = words[guessIndex];
+            int guessIndex = (new Random()).Next(readText.Length-1);
+            current = readText[guessIndex];
 
-            //copyCurrent = "";
+            copyCurrent = "";
 
-            //for(int index=0; index < current.Length; index++)
-            //{
-            //    copyCurrent += "_";
-            //}
+            for (int index = 0; index<current.Length; index++)
+            {
+                copyCurrent += "_";
+            }
             displayCopy();
         }
         private void displayCopy()
         {
             lblShowWord.Text += " ";
-            for (int index = 0; index < copyCurrent.Length; index++)
+            for (int index = 0; index<copyCurrent.Length; index++)
             {
                 lblShowWord.Text += copyCurrent.Substring(index, 1);
                 lblShowWord.Text += " ";
@@ -89,17 +80,17 @@ namespace Hangman
             {
                 wrongGuesses++;
             }
-            if(wrongGuesses <7)
+            if(wrongGuesses < 9)
             {
                 hangImage.Image = hangImages[wrongGuesses];
             }
             else
             {
-                lblResult.Text = "Geçmiş Olsun";
+                lblResult.Text = "Bye Bye";
             }
             if(copyCurrent.Equals(current))
             {
-                lblResult.Text = "Kazandın!!";
+                lblResult.Text = "You Win";
             }
             hangImage.Image = hangImages[wrongGuesses];
         }
@@ -113,8 +104,8 @@ namespace Hangman
         private void button24_Click(object sender, EventArgs e)
         {
             setupWordChoice();
-            lblResult.Text = "";
-            this.Controls
+            lblResult.Text = " ";
+            this.Controls.Add(lblResult);
         }
     }
 }

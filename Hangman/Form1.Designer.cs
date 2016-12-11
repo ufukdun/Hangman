@@ -102,7 +102,6 @@
             this.lblResult.Name = "lblResult";
             this.lblResult.Size = new System.Drawing.Size(178, 41);
             this.lblResult.TabIndex = 3;
-            this.lblResult.Text = "label1";
             // 
             // lblShowWord
             // 
